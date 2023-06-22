@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userAdmin">
+
+	<sql id="search">
+		<trim prefixOverrides="or">
+			<foreach item="type" collection="types">
+				<trim prefix="or">
+					<choose>
+						<when test="type == 'name'.toString()">
+							member_name like concat('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'id'.toString()">
+							member_name like concat('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'age'.toString()">
+							member_name like concat('%', #{keyword}, '%')
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
+
+<!--전체 조회-->
+	<select id="select" resultType="userVO">
+		select user_number , user_id,user_name, user_address, user_phonenumber, user_age, user_gender, user_email 
+		from tbl_user 
+		order by user_number 
+		limit #{offset}, #{rowCount}
+	</select>
+	
+<!--회원삭제 -->
+	<delete id="delete">
+		delete from tbl_user
+		where user_id = #{userId}
+	</delete>
+	
+<!-- 개수 -->
+  	<select id="getTotal" resultType="_int">
+		select distinct count(user_number) 
+		from tbl_user 
+	</select>  
+</mapper>
+  
+ 
